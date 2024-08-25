@@ -14,7 +14,7 @@ public class GravitySystem : MonoBehaviour
         {
             CelestialObjects.Add(gameObj.GetComponent<Rigidbody>());
         }
-        Orbit();
+        Orbit(1,0,true);
     }
     public void FixedUpdate()
     {
@@ -56,7 +56,7 @@ public class GravitySystem : MonoBehaviour
         }
     }
 
-    public void Orbit()
+    public void Orbit(float orbitspeed, int index,bool all)
     {
         for (int a = 0; a < CelestialObjects.Count; a++)
         {
@@ -81,7 +81,18 @@ public class GravitySystem : MonoBehaviour
                     // Calculate the velocity to set an initial orbit
                     Vector3 direction = (obj2 - obj1).normalized;
                     rbA.transform.LookAt(rbB.transform);
-                    rbA.velocity += Vector3.Cross(direction, Vector3.up) * Mathf.Sqrt((G * m2) / r);
+                    if (a == index || b == index)
+                    {
+                        rbA.velocity += Vector3.Cross(direction, Vector3.up)  * orbitspeed;
+                    }
+                    else if(!all)
+                    {
+                        rbA.velocity += Vector3.Cross(direction, Vector3.up) * Mathf.Sqrt((G * m2) / r)*0f;
+                    }
+                    else if(all)
+                    {
+                        rbA.velocity += Vector3.Cross(direction, Vector3.up) * Mathf.Sqrt((G * m2) / r);
+                    }
                 }
             }
         }
